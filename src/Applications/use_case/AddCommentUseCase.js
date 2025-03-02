@@ -7,6 +7,7 @@ class AddCommentUseCase {
   }
 
   async execute(useCasePayload, owner) {
+
     const { threadId } = useCasePayload;
     const newComment = new NewComment({ ...useCasePayload, owner });
   
