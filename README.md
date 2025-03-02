@@ -20,3 +20,12 @@ psql -U developer
 2. Buat Database Baru
 CREATE DATABASE forumapi;
 CREATE DATABASE forumapi_test;
+
+<!-- Cara Migrate Databases -->
+1. Create Migrate
+npm run migrate create "create table users"
+npm run migrate create "create table authentications"
+
+2. Run Migrate
+npm run migrate up
+npm run migrate:test up
