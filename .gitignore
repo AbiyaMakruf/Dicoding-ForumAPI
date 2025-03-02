@@ -128,3 +128,11 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+# Custom Dicoding
+node_modules
+package-lock.json
+.idea
+config/database/test.json
+coverage
+.env
