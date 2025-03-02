@@ -29,3 +29,6 @@ npm run migrate create "create table authentications"
 2. Run Migrate
 npm run migrate up
 npm run migrate:test up
+
+<!-- Cara Membuat Struktur Proyek -->
+tree /F /A > struktur_proyek.txt

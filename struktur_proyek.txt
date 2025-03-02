@@ -1,0 +1,142 @@
+Folder PATH listing for volume OS
+Volume serial number is 1AFB-DD4F
+C:.
+|   .env
+|   .gitignore
+|   package-lock.json
+|   package.json
+|   README.md
+|   struktur_proyek.txt
+|   
++---config
+|   \---database
+|           test.json
+|           
++---migrations
+|       1627983516963_create-table-users.js
+|       1627983555473_create-table-authentications.js
+|       
++---postman
+|       Forum API V1 Test.postman_collection.json
+|       Forum API V1 Test.postman_environment.json
+|       
++---src
+|   |   app.js
+|   |   
+|   +---Applications
+|   |   +---security
+|   |   |   |   AuthenticationTokenManager.js
+|   |   |   |   PasswordHash.js
+|   |   |   |   
+|   |   |   \---_test
+|   |   |           AuthenticationTokenManager.test.js
+|   |   |           PasswordHash.test.js
+|   |   |           
+|   |   \---use_case
+|   |       |   AddUserUseCase.js
+|   |       |   DeleteAuthenticationUseCase.js
+|   |       |   LoginUserUseCase.js
+|   |       |   LogoutUserUseCase.js
+|   |       |   RefreshAuthenticationUseCase.js
+|   |       |   
+|   |       \---_test
+|   |               AddUserUseCase.test.js
+|   |               DeleteAuthenticationUseCase.test.js
+|   |               LoginUserUseCase.test.js
+|   |               LogoutUserUseCase.test.js
+|   |               RefreshAuthenticationUseCase.test.js
+|   |               
+|   +---Commons
+|   |   \---exceptions
+|   |       |   AuthenticationError.js
+|   |       |   AuthorizationError.js
+|   |       |   ClientError.js
+|   |       |   DomainErrorTranslator.js
+|   |       |   InvariantError.js
+|   |       |   NotFoundError.js
+|   |       |   
+|   |       \---_test
+|   |               AuthenticationError.test.js
+|   |               AuthorizationError.test.js
+|   |               ClientError.test.js
+|   |               DomainErrorTranslator.test.js
+|   |               InvariantError.test.js
+|   |               NotFoundError.test.js
+|   |               
+|   +---Domains
+|   |   +---authentications
+|   |   |   |   AuthenticationRepository.js
+|   |   |   |   
+|   |   |   +---entities
+|   |   |   |   |   NewAuth.js
+|   |   |   |   |   
+|   |   |   |   \---_test
+|   |   |   |           NewAuth.test.js
+|   |   |   |           
+|   |   |   \---_test
+|   |   |           AuthenticationRepository.test.js
+|   |   |           
+|   |   \---users
+|   |       |   UserRepository.js
+|   |       |   
+|   |       +---entities
+|   |       |   |   RegisteredUser.js
+|   |       |   |   RegisterUser.js
+|   |       |   |   UserLogin.js
+|   |       |   |   
+|   |       |   \---_test
+|   |       |           RegisteredUser.test.js
+|   |       |           RegisterUser.test.js
+|   |       |           UserLogin.test.js
+|   |       |           
+|   |       \---_test
+|   |               UserRepository.test.js
+|   |               
+|   +---Infrastructures
+|   |   |   container.js
+|   |   |   
+|   |   +---database
+|   |   |   \---postgres
+|   |   |           pool.js
+|   |   |           
+|   |   +---http
+|   |   |   |   createServer.js
+|   |   |   |   
+|   |   |   \---_test
+|   |   |           authentications.test.js
+|   |   |           createServer.test.js
+|   |   |           users.test.js
+|   |   |           
+|   |   +---repository
+|   |   |   |   AuthenticationRepositoryPostgres.js
+|   |   |   |   UserRepositoryPostgres.js
+|   |   |   |   
+|   |   |   \---_test
+|   |   |           AuthenticationRepositoryPostgres.test.js
+|   |   |           UserRepositoryPostgres.test.js
+|   |   |           
+|   |   \---security
+|   |       |   BcryptPasswordHash.js
+|   |       |   JwtTokenManager.js
+|   |       |   
+|   |       \---_test
+|   |               BcryptPasswordHash.test.js
+|   |               JwtTokenManager.test.js
+|   |               
+|   \---Interfaces
+|       \---http
+|           \---api
+|               +---authentications
+|               |       handler.js
+|               |       index.js
+|               |       routes.js
+|               |       
+|               \---users
+|                       handler.js
+|                       index.js
+|                       routes.js
+|                       
+\---tests
+        AuthenticationsTableTestHelper.js
+        UsersTableTestHelper.js
+        
