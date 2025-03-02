@@ -17,6 +17,8 @@ const ThreadRepository = require('../Domains/threads/ThreadRepository');
 const ThreadRepositoryPostgres = require('./repository/ThreadRepositoryPostgres');
 const CommentRepository = require('../Domains/comments/CommentRepository');
 const CommentRepositoryPostgres = require('./repository/CommentRepositoryPostgres');
+const ReplyRepository = require('../Domains/replies/ReplyRepository');
+const ReplyRepositoryPostgres = require('./repository/ReplyRepositoryPostgres');
 
 // use case
 const AddUserUseCase = require('../Applications/use_case/AddUserUseCase');
@@ -31,6 +33,7 @@ const AddThreadUseCase = require('../Applications/use_case/AddThreadUseCase');
 const GetThreadDetailsUseCase = require('../Applications/use_case/GetThreadDetailsUseCase');
 const AddCommentUseCase = require('../Applications/use_case/AddCommentUseCase');
 const DeleteCommentUseCase = require('../Applications/use_case/DeleteCommentUseCase');
+const AddReplyUseCase = require('../Applications/use_case/AddReplyUseCase');
 
 // creating container
 const container = createContainer();
@@ -106,6 +109,16 @@ container.register([
         {
           concrete: Jwt.token,
         },
+      ],
+    },
+  },
+  {
+    key: ReplyRepository.name,
+    Class: ReplyRepositoryPostgres,
+    parameter: {
+      dependencies: [
+        { concrete: pool },
+        { concrete: nanoid },
       ],
     },
   },
@@ -246,6 +259,16 @@ container.register([
           name: 'commentRepository',
           internal: CommentRepository.name,
         },
+      ],
+    },
+  },
+  {
+    key: AddReplyUseCase.name,
+    Class: AddReplyUseCase,
+    parameter: {
+      injectType: 'destructuring',
+      dependencies: [
+        { name: 'replyRepository', internal: ReplyRepository.name },
       ],
     },
   },
