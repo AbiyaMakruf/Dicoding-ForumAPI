@@ -4,9 +4,7 @@ const routes = require('./routes');
 module.exports = {
   name: 'comments',
   register: async (server, { container }) => {
-    const commentsHandler = new CommentsHandler({
-      deleteCommentUseCase: container.getInstance(require('../../../Applications/use_case/DeleteCommentUseCase')),
-    });
+    const commentsHandler = new CommentsHandler(container);
     server.route(routes(commentsHandler));
   },
 };

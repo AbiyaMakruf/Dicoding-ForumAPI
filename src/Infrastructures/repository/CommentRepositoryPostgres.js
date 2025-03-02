@@ -1,10 +1,26 @@
 const CommentRepository = require('../../Domains/comments/CommentRepository');
 
 class CommentRepositoryPostgres extends CommentRepository {
-  constructor(pool) {
+  constructor(pool, idGenerator) {
     super();
     this._pool = pool;
+    this._idGenerator = idGenerator;
   }
+
+  async addComment({ threadId, content, owner }) {
+    const id = `comment-${this._idGenerator()}`;
+    const createdAt = new Date().toISOString();
+  
+    const query = {
+      text: `INSERT INTO comments (id, thread_id, content, owner, created_at, is_deleted)
+             VALUES ($1, $2, $3, $4, $5, $6) RETURNING id, content, owner`,
+      values: [id, threadId, content, owner, createdAt, false],
+    };
+  
+    const result = await this._pool.query(query);
+    return result.rows[0];
+  }
+  
 
   async verifyCommentOwner(commentId, owner) {
     const query = {
