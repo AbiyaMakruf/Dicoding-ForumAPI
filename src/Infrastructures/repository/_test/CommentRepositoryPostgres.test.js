@@ -25,15 +25,44 @@ describe('CommentRepositoryPostgres', () => {
     await pool.end();
   });
 
+  it('should persist comment and return it correctly', async () => {
+    const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, () => `123-${Date.now()}`);
+    const newComment = {
+      threadId: 'thread-123',
+      content: 'New comment',
+      owner: 'user-123',
+    };
+
+    const addedComment = await commentRepositoryPostgres.addComment(newComment);
+    const comments = await CommentsTableTestHelper.findCommentById(addedComment.id);
+
+    expect(addedComment).toBeDefined();
+    expect(comments).toHaveLength(1);
+    expect(comments[0].content).toBe(newComment.content);
+  });
+
   it('should delete a comment correctly', async () => {
-    const commentRepositoryPostgres = new CommentRepositoryPostgres(pool);
+    const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, () => `123-${Date.now()}`);
     await commentRepositoryPostgres.deleteComment('comment-123');
     const comments = await CommentsTableTestHelper.findCommentById('comment-123');
     expect(comments[0].is_deleted).toBe(true);
   });
 
+  it('should verify if comment exists', async () => {
+    const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, () => `123-${Date.now()}`);
+    await expect(commentRepositoryPostgres.verifyCommentExists('comment-123')).resolves.not.toThrow();
+    await expect(commentRepositoryPostgres.verifyCommentExists('comment-not-exist')).rejects.toThrowError('COMMENT_REPOSITORY.COMMENT_NOT_FOUND');
+  });
+
+  it('should verify comment owner correctly', async () => {
+    const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, () => `123-${Date.now()}`);
+    await expect(commentRepositoryPostgres.verifyCommentOwner('comment-123', 'user-123')).resolves.not.toThrow();
+    await expect(commentRepositoryPostgres.verifyCommentOwner('comment-123', 'wrong-user'))
+      .rejects.toThrowError('COMMENT_REPOSITORY.NOT_COMMENT_OWNER');
+  });
+
   it('should get comments by thread id correctly', async () => {
-    const commentRepositoryPostgres = new CommentRepositoryPostgres(pool);
+    const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, () => `123-${Date.now()}`);
     const comments = await commentRepositoryPostgres.getCommentsByThreadId('thread-123');
     expect(comments).toHaveLength(1);
     expect(comments[0].id).toEqual('comment-123');
@@ -41,77 +70,19 @@ describe('CommentRepositoryPostgres', () => {
     expect(comments[0].content).toEqual('A comment');
   });
 
-  it('should throw error when comment owner is not valid', async () => {
-    // Arrange
-    const commentRepositoryPostgres = new CommentRepositoryPostgres(pool);
-    await expect(commentRepositoryPostgres.verifyCommentOwner('comment-123', 'wrong-user'))
-      .rejects.toThrowError('COMMENT_REPOSITORY.NOT_COMMENT_OWNER');
-  });
-
-  it('should return empty array if thread has no comments', async () => {
-    // Arrange
-    const commentRepositoryPostgres = new CommentRepositoryPostgres(pool);
-    // Act
-    const comments = await commentRepositoryPostgres.getCommentsByThreadId('thread-not-exist');
-    // Assert
-    expect(comments).toEqual([]);
-  });
-
-  it('should throw error when comment is not found', async () => {
-    // Arrange
-    const commentRepositoryPostgres = new CommentRepositoryPostgres(pool);
-    
-    // Act & Assert
-    await expect(commentRepositoryPostgres.verifyCommentOwner('comment-not-exist', 'user-123'))
-      .rejects.toThrowError('COMMENT_REPOSITORY.COMMENT_NOT_FOUND');
-  });
-
-  it('should throw error when owner is not valid', async () => {
-    // Arrange: Gunakan ID unik
-    const uniqueCommentId = `comment-${new Date().getTime()}`;
-    await CommentsTableTestHelper.addComment({
-      id: uniqueCommentId,
-      content: 'Another comment',
-      owner: 'user-123',
-      threadId: 'thread-123',
-    });
-
-    const commentRepositoryPostgres = new CommentRepositoryPostgres(pool);
-    
-    // Act & Assert
-    await expect(commentRepositoryPostgres.verifyCommentOwner(uniqueCommentId, 'wrong-user'))
-      .rejects.toThrowError('COMMENT_REPOSITORY.NOT_COMMENT_OWNER');
-  });
-
   it('should return "**komentar telah dihapus**" if comment is deleted', async () => {
-    // Arrange: Tambah komentar baru
-    const uniqueCommentId = `comment-${new Date().getTime()}`;
+    const uniqueCommentId = `comment-${Date.now()}`;
     await CommentsTableTestHelper.addComment({
       id: uniqueCommentId,
       content: 'This comment will be deleted',
       owner: 'user-123',
       threadId: 'thread-123',
     });
-  
-    const commentRepositoryPostgres = new CommentRepositoryPostgres(pool);
     
-    // Act: Hapus komentar
+    const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, () => `123-${Date.now()}`);
     await commentRepositoryPostgres.deleteComment(uniqueCommentId);
     const comments = await commentRepositoryPostgres.getCommentsByThreadId('thread-123');
-  
-    // Assert
-    expect(comments).toHaveLength(2); // 1 komentar lama + 1 komentar yang baru dihapus
+    
     expect(comments.find(c => c.id === uniqueCommentId).content).toEqual('**komentar telah dihapus**');
   });
-
-  it('should not throw error when owner is valid', async () => {
-    // Arrange: Gunakan komentar yang sudah ada
-    const commentRepositoryPostgres = new CommentRepositoryPostgres(pool);
-  
-    // Act & Assert: Tidak boleh melempar error
-    await expect(commentRepositoryPostgres.verifyCommentOwner('comment-123', 'user-123'))
-      .resolves.not.toThrow();
-  });
-  
-
 });

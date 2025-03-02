@@ -7,10 +7,6 @@ class AddCommentUseCase {
   }
 
   async execute(useCasePayload, owner) {
-    if (!owner) {
-      throw new Error('COMMENT.NOT_CONTAIN_OWNER');
-    }
-    
     const { threadId } = useCasePayload;
     const newComment = new NewComment({ ...useCasePayload, owner });
   

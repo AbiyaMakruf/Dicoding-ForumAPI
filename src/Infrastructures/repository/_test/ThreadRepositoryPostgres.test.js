@@ -44,4 +44,14 @@ describe('ThreadRepositoryPostgres', () => {
     await expect(threadRepositoryPostgres.getThreadById('thread-not-exist'))
       .rejects.toThrowError('THREAD_REPOSITORY.THREAD_NOT_FOUND');
   });
+
+  it('should throw error when verifying a non-existent thread', async () => {
+    // Arrange
+    const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool);
+  
+    // Act & Assert
+    await expect(threadRepositoryPostgres.verifyThreadExists('thread-not-exist'))
+      .rejects.toThrowError('THREAD_REPOSITORY.THREAD_NOT_FOUND');
+  });
+  
 });
