@@ -1,5 +1,3 @@
-Folder PATH listing for volume OS
-Volume serial number is 1AFB-DD4F
 C:.
 |   .env
 |   .gitignore
@@ -11,10 +9,13 @@ C:.
 +---config
 |   \---database
 |           test.json
-|           
+|                 
 +---migrations
 |       1627983516963_create-table-users.js
 |       1627983555473_create-table-authentications.js
+|       1740899905329_create-table-threads.js
+|       1740900890574_create-table-comments.js
+|       1740901570792_update-table-comments.js
 |       
 +---postman
 |       Forum API V1 Test.postman_collection.json
@@ -33,15 +34,23 @@ C:.
 |   |   |           PasswordHash.test.js
 |   |   |           
 |   |   \---use_case
+|   |       |   AddCommentUseCase.js
+|   |       |   AddThreadUseCase.js
 |   |       |   AddUserUseCase.js
 |   |       |   DeleteAuthenticationUseCase.js
+|   |       |   DeleteCommentUseCase.js
+|   |       |   GetThreadDetailsUseCase.js
 |   |       |   LoginUserUseCase.js
 |   |       |   LogoutUserUseCase.js
 |   |       |   RefreshAuthenticationUseCase.js
 |   |       |   
 |   |       \---_test
+|   |               AddCommentUseCase.test.js
+|   |               AddThreadUseCase.test.js
 |   |               AddUserUseCase.test.js
 |   |               DeleteAuthenticationUseCase.test.js
+|   |               DeleteCommentUseCase.test.js
+|   |               GetThreadDetailsUseCase.test.js
 |   |               LoginUserUseCase.test.js
 |   |               LogoutUserUseCase.test.js
 |   |               RefreshAuthenticationUseCase.test.js
@@ -76,6 +85,30 @@ C:.
 |   |   |   \---_test
 |   |   |           AuthenticationRepository.test.js
 |   |   |           
+|   |   +---comments
+|   |   |   |   CommentRepository.js
+|   |   |   |   
+|   |   |   +---entities
+|   |   |   |   |   NewComment.js
+|   |   |   |   |   
+|   |   |   |   \---_test
+|   |   |   |           NewComment.test.js
+|   |   |   |           
+|   |   |   \---_test
+|   |   |           CommentRepository.test.js
+|   |   |           
+|   |   +---threads
+|   |   |   |   ThreadRepository.js
+|   |   |   |   
+|   |   |   +---entities
+|   |   |   |   |   NewThread.js
+|   |   |   |   |   
+|   |   |   |   \---_test
+|   |   |   |           NewThread.test.js
+|   |   |   |           
+|   |   |   \---_test
+|   |   |           ThreadRepository.test.js
+|   |   |           
 |   |   \---users
 |   |       |   UserRepository.js
 |   |       |   
@@ -104,15 +137,21 @@ C:.
 |   |   |   |   
 |   |   |   \---_test
 |   |   |           authentications.test.js
+|   |   |           comments.test.js
 |   |   |           createServer.test.js
+|   |   |           threads.test.js
 |   |   |           users.test.js
 |   |   |           
 |   |   +---repository
 |   |   |   |   AuthenticationRepositoryPostgres.js
+|   |   |   |   CommentRepositoryPostgres.js
+|   |   |   |   ThreadRepositoryPostgres.js
 |   |   |   |   UserRepositoryPostgres.js
 |   |   |   |   
 |   |   |   \---_test
 |   |   |           AuthenticationRepositoryPostgres.test.js
+|   |   |           CommentRepositoryPostgres.test.js
+|   |   |           ThreadRepositoryPostgres.test.js
 |   |   |           UserRepositoryPostgres.test.js
 |   |   |           
 |   |   \---security
@@ -131,6 +170,16 @@ C:.
 |               |       index.js
 |               |       routes.js
 |               |       
+|               +---comments
+|               |       handler.js
+|               |       index.js
+|               |       routes.js
+|               |       
+|               +---threads
+|               |       handler.js
+|               |       index.js
+|               |       routes.js
+|               |       
 |               \---users
 |                       handler.js
 |                       index.js
@@ -138,5 +187,7 @@ C:.
 |                       
 \---tests
         AuthenticationsTableTestHelper.js
+        CommentsTableTestHelper.js
+        ThreadsTableTestHelper.js
         UsersTableTestHelper.js
         
