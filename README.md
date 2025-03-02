@@ -95,10 +95,11 @@ const container = require('../../../../Infrastructures/container');
 const AuthenticationTestHelper = require('../../../../tests/AuthenticationsTableTestHelper');
 const UsersTableTestHelper = require('../../../../tests/UsersTableTestHelper');
 const ThreadsTableTestHelper = require('../../../../tests/ThreadsTableTestHelper');
+const CommentsTableTestHelper = require('../../../../tests/CommentsTableTestHelper');
 const bcrypt = require('bcrypt');
 const Jwt = require('@hapi/jwt');
 
-describe('/threads/{threadId}/comments endpoint', () => {
+describe('/threads/{threadId}/comments/{commentId} endpoint', () => {
   let server;
   beforeAll(async () => {
     server = await createServer(container);
@@ -115,7 +116,7 @@ describe('/threads/{threadId}/comments endpoint', () => {
     await pool.end();
   });
 
-  it('should response 201 and persist comment', async () => {
+  it('should response 200 and delete comment', async () => {
     const password = await bcrypt.hash('secret', 10);
     await UsersTableTestHelper.addUser({ id: 'user-123', username: 'dicoding', password });
     const accessToken = Jwt.token.generate(
@@ -124,20 +125,15 @@ describe('/threads/{threadId}/comments endpoint', () => {
     );
     await AuthenticationTestHelper.addToken(accessToken);
     await ThreadsTableTestHelper.addThread({ id: 'thread-123', title: 'Thread Title', body: 'Thread Body', owner: 'user-123' });
-    
-    const requestPayload = { content: 'A comment' };
+    await CommentsTableTestHelper.addComment({ id: 'comment-123', content: 'A comment', owner: 'user-123', threadId: 'thread-123' });
     
     const response = await server.inject({
-      method: 'POST',
-      url: '/threads/thread-123/comments',
-      payload: requestPayload,
+      method: 'DELETE',
+      url: '/threads/thread-123/comments/comment-123',
       headers: { Authorization: `Bearer ${accessToken}` },
     });
     
-    const responseJson = JSON.parse(response.payload);
-    expect(response.statusCode).toEqual(201);
-    expect(responseJson.status).toEqual('success');
-    expect(responseJson.data.addedComment).toHaveProperty('id');
-    expect(responseJson.data.addedComment.content).toEqual(requestPayload.content);
+    expect(response.statusCode).toEqual(200);
+    expect(JSON.parse(response.payload).status).toEqual('success');
   });
 });
