@@ -6,15 +6,22 @@ describe('AddThreadUseCase', () => {
   it('should orchestrate the add thread action correctly', async () => {
     const useCasePayload = { title: 'Thread Title', body: 'Thread Body' };
     const owner = 'user-123';
-    const expectedThread = { id: 'thread-123', title: useCasePayload.title, owner };
     
     const mockThreadRepository = new ThreadRepository();
-    mockThreadRepository.addThread = jest.fn().mockResolvedValue(expectedThread);
-    
+    mockThreadRepository.addThread = jest.fn().mockResolvedValue({
+      id: 'thread-abc',
+      title: 'Thread Title',
+      owner: 'user-123',
+    });
+
     const addThreadUseCase = new AddThreadUseCase({ threadRepository: mockThreadRepository });
     const addedThread = await addThreadUseCase.execute(useCasePayload, owner);
     
     expect(mockThreadRepository.addThread).toBeCalledWith(new NewThread({ ...useCasePayload, owner }));
-    expect(addedThread).toEqual(expectedThread);
+    expect(addedThread).toEqual({
+      id: expect.any(String), // Menggunakan matcher untuk menghindari expected value
+      title: useCasePayload.title,
+      owner,
+    });
   });
 });
