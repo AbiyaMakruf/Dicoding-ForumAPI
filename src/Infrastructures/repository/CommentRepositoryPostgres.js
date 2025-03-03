@@ -1,4 +1,5 @@
 const CommentRepository = require('../../Domains/comments/CommentRepository');
+const Comment = require('../../Domains/comments/entities/Comment');
 
 class CommentRepositoryPostgres extends CommentRepository {
   constructor(pool, idGenerator) {
@@ -62,15 +63,17 @@ class CommentRepositoryPostgres extends CommentRepository {
              ORDER BY comments.created_at ASC`,
       values: [threadId],
     };
-    
+  
     const result = await this._pool.query(query);
-    return result.rows.map((comment) => ({
-      id: comment.id,
-      username: comment.username,
-      date: comment.date,
-      content: comment.is_deleted ? '**komentar telah dihapus**' : comment.content,
+    return result.rows.map((row) => new Comment({
+      id: row.id,
+      content: row.is_deleted ? '**komentar telah dihapus**' : row.content,
+      date: row.date,
+      username: row.username,
+      is_deleted: Boolean(row.is_deleted),
     }));
-  }
+  }  
+
 }
 
 module.exports = CommentRepositoryPostgres;

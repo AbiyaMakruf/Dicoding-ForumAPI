@@ -74,10 +74,10 @@ describe('CommentRepositoryPostgres', () => {
     expect(comments).toHaveLength(1);
     expect(comments[0].id).toEqual('comment-123');
     expect(comments[0].username).toEqual('dicoding');
-    expect(new Date(comments[0].date)).toBeInstanceOf(Date);
     expect(comments[0].content).toEqual('A comment');
+    expect(new Date(comments[0].date)).toBeInstanceOf(Date);
+});
 
-  });
 
   it('should return "**komentar telah dihapus**" if comment is deleted', async () => {
     const uniqueCommentId = `comment-${Date.now()}`;
