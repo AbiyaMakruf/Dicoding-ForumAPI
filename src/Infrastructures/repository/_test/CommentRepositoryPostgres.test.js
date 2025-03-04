@@ -55,10 +55,17 @@ describe('CommentRepositoryPostgres', () => {
 
   it('should verify if comment exists', async () => {
     const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, () => `123-${Date.now()}`);
-    await expect(commentRepositoryPostgres.verifyCommentExists('comment-123')).resolves.not.toThrowError();
+
+    await expect(commentRepositoryPostgres.verifyCommentExists('comment-123')).resolves.not.toThrow();
+  
+    await commentRepositoryPostgres.verifyCommentExists('comment-123');
+    
+    expect(await commentRepositoryPostgres.verifyCommentExists('comment-123')).toBeUndefined();
+  
     await expect(commentRepositoryPostgres.verifyCommentExists('comment-not-exist'))
       .rejects.toThrowError(new Error('COMMENT_REPOSITORY.COMMENT_NOT_FOUND'));
   });
+  
 
   it('should verify comment owner correctly', async () => {
     const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, () => `123-${Date.now()}`);
