@@ -2,11 +2,26 @@
 const pool = require('../src/Infrastructures/database/postgres/pool');
 
 const CommentsTableTestHelper = {
-  async addComment({ id = 'comment-123', content = 'A comment', owner = 'user-123', threadId = 'thread-123' }) {
+  // async addComment({ id = 'comment-123', content = 'A comment', owner = 'user-123', threadId = 'thread-123' }) {
+  //   const query = {
+  //     text: 'INSERT INTO comments (id, content, owner, thread_id, created_at, is_deleted) VALUES($1, $2, $3, $4, NOW(), false)',
+  //     values: [id, content, owner, threadId],
+  //   };
+  //   await pool.query(query);
+  // },
+  async addComment({
+    id = 'comment-123',
+    content = 'A comment',
+    owner = 'user-123',
+    threadId = 'thread-123',
+    createdAt = new Date().toISOString(), // nilai default untuk created_at
+    is_deleted = false, // nilai default untuk is_deleted
+  }) {
     const query = {
-      text: 'INSERT INTO comments (id, content, owner, thread_id, created_at, is_deleted) VALUES($1, $2, $3, $4, NOW(), false)',
-      values: [id, content, owner, threadId],
+      text: 'INSERT INTO comments (id, content, owner, thread_id, created_at, is_deleted) VALUES($1, $2, $3, $4, $5, $6)',
+      values: [id, content, owner, threadId, createdAt, is_deleted],
     };
+  
     await pool.query(query);
   },
 
