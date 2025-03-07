@@ -86,19 +86,26 @@ describe('CommentRepositoryPostgres', () => {
 });
 
 
-  it('should return "**komentar telah dihapus**" if comment is deleted', async () => {
-    const uniqueCommentId = `comment-${Date.now()}`;
-    await CommentsTableTestHelper.addComment({
-      id: uniqueCommentId,
-      content: 'This comment will be deleted',
-      owner: 'user-123',
-      threadId: 'thread-123',
-    });
-
-    const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, () => `123-${Date.now()}`);
-    await commentRepositoryPostgres.deleteComment(uniqueCommentId);
-    const comments = await commentRepositoryPostgres.getCommentsByThreadId('thread-123');
-
-    expect(comments.find(c => c.id === uniqueCommentId).content).toEqual('**komentar telah dihapus**');
+it('should return "**komentar telah dihapus**" if comment is deleted', async () => {
+  const uniqueCommentId = `comment-${Date.now()}`;
+  
+  await CommentsTableTestHelper.addComment({
+    id: uniqueCommentId,
+    content: 'This comment will be deleted',
+    owner: 'user-123',
+    threadId: 'thread-123',
   });
+
+  const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, () => `123-${Date.now()}`);
+
+  await commentRepositoryPostgres.deleteComment(uniqueCommentId);
+
+  const commentFromDB = await CommentsTableTestHelper.findCommentById(uniqueCommentId);
+  
+  expect(commentFromDB[0].is_deleted).toBe(true);
+
+  const comments = await commentRepositoryPostgres.getCommentsByThreadId('thread-123');
+  expect(comments.find(c => c.id === uniqueCommentId).content).toEqual('**komentar telah dihapus**');
+});
+
 });

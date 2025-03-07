@@ -55,14 +55,20 @@ describe('ThreadRepositoryPostgres', () => {
   });
 
   it('should not throw error when verifying an existing thread', async () => {
-    // Arrange
+    // Arrange: Tambahkan thread ke database
     await ThreadsTableTestHelper.addThread({ id: 'thread-123', title: 'Thread Title', body: 'Thread Body', owner: 'user-123' });
     const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool);
   
-    // Act & Assert
+    // Act: Panggil fungsi verifyThreadExists
+    const result = await threadRepositoryPostgres.verifyThreadExists('thread-123');
+  
+    // Assert: Pastikan fungsi tidak melempar error
     await expect(threadRepositoryPostgres.verifyThreadExists('thread-123'))
       .resolves.not.toThrow();
+  
+    expect(result).toBeUndefined();
   });
+  
   
   
 });
