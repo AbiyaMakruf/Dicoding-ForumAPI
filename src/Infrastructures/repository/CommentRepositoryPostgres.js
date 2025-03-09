@@ -51,7 +51,11 @@ class CommentRepositoryPostgres extends CommentRepository {
       text: 'UPDATE comments SET is_deleted = true WHERE id = $1',
       values: [commentId],
     };
-    await this._pool.query(query);
+    const result = await this._pool.query(query);
+
+    if (!result.rowCount) {
+      throw new Error('COMMENT_REPOSITORY.COMMENT_NOT_FOUND');
+    }
   }
 
   async getCommentsByThreadId(threadId) {

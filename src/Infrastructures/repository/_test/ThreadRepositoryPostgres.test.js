@@ -64,7 +64,7 @@ describe('ThreadRepositoryPostgres', () => {
   
     // Assert: Pastikan fungsi tidak melempar error
     await expect(threadRepositoryPostgres.verifyThreadExists('thread-123'))
-      .resolves.not.toThrow();
+      .resolves.not.toThrow('THREAD_REPOSITORY.THREAD_NOT_FOUND');
   
     expect(result).toBeUndefined();
   });
