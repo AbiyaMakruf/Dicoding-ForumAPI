@@ -1,0 +1,8 @@
+// Rename nama file menjadi test.json dan sesuaikan value user dan password
+{
+  "user": "developer",
+  "password": "",
+  "host": "localhost",
+  "port": 5432,
+  "database": "forumapi_test"
+}
