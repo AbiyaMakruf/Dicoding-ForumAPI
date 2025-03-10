@@ -1,7 +1,7 @@
 const GetThreadDetailsUseCase = require('../GetThreadDetailsUseCase');
 const ThreadRepository = require('../../../Domains/threads/ThreadRepository');
 const CommentRepository = require('../../../Domains/comments/CommentRepository');
-const Comment = require('../../../Domains/comments/entities/Comment'); // ✅ Import Comment Entity
+const Comment = require('../../../Domains/comments/entities/Comment');
 
 describe('GetThreadDetailsUseCase', () => {
   it('should orchestrate the get thread details action correctly', async () => {
@@ -33,9 +33,23 @@ describe('GetThreadDetailsUseCase', () => {
     const mockThreadRepository = new ThreadRepository();
     const mockCommentRepository = new CommentRepository();
     
-    mockThreadRepository.getThreadById = jest.fn().mockResolvedValue(mockThreadData);
+    mockThreadRepository.getThreadById = jest.fn().mockResolvedValue({
+      id: threadId,
+      title: 'Thread Title',
+      body: 'Thread Body',
+      date: '2025-03-02T07:00:00.000Z',
+      username: 'dicoding',
+    });
 
-    mockCommentRepository.getCommentsByThreadId = jest.fn().mockResolvedValue(mockCommentsData);
+    mockCommentRepository.getCommentsByThreadId = jest.fn().mockResolvedValue([
+      new Comment({
+        id: 'comment-123',
+        username: 'user1',
+        date: '2025-03-02T07:10:00.000Z',
+        content: 'A comment',
+        is_deleted: false,
+      }),
+    ]);
     
     const getThreadDetailsUseCase = new GetThreadDetailsUseCase({
       threadRepository: mockThreadRepository,
