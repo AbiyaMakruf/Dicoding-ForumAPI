@@ -1,13 +1,16 @@
 # Proyek Pertama: Menjadi Back-End Developer Expert dengan JavaScript
 ## Penilaian Proyek
-Proyek ini berhasil mendapatkan bintang ?/5 pada submission dicoding course Menjadi Back-End Developer Expert dengan JavaScript.
+Proyek ini berhasil mendapatkan bintang 4/5 pada submission dicoding course Menjadi Back-End Developer Expert dengan JavaScript.
 
 ![Penilaian Proyek](README/penilaian_proyek.png)
 
 Kriteria tambahan yang saya kerjakan sehingga mendapatkan nilai terbaik:
-1. 
-2. 
-3. 
+1. Menerapkan Automation Testing
+2. Menerapkan Clean Architecture
+
+Kriteria tambahan yang tidak saya kerjakan:
+1. Menambahkan Balasan pada Komentar Thread
+2. Menghapus Balasan pada Komentar Thread
 
 # 📌 Forum API
 
