@@ -48,4 +48,24 @@ describe('Comment Entity', () => {
       content: '**komentar telah dihapus**',
     });
   });
+
+  it('should convert date to ISO string if given as a Date object', () => {
+    const payload = {
+      id: 'comment-123',
+      username: 'dicoding',
+      date: new Date('2025-03-03T16:47:33.136Z'),
+      content: 'Hello world!',
+      is_deleted: false,
+    };
+  
+    const comment = new Comment(payload);
+  
+    expect(comment).toEqual({
+      id: 'comment-123',
+      username: 'dicoding',
+      date: '2025-03-03T16:47:33.136Z',
+      content: 'Hello world!',
+    });
+  });
+  
 });

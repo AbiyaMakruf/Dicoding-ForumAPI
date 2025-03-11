@@ -51,7 +51,11 @@ class CommentRepositoryPostgres extends CommentRepository {
       text: 'UPDATE comments SET is_deleted = true WHERE id = $1',
       values: [commentId],
     };
-    await this._pool.query(query);
+    const result = await this._pool.query(query);
+
+    if (!result.rowCount) {
+      throw new Error('COMMENT_REPOSITORY.COMMENT_NOT_FOUND');
+    }
   }
 
   async getCommentsByThreadId(threadId) {
@@ -67,7 +71,7 @@ class CommentRepositoryPostgres extends CommentRepository {
     const result = await this._pool.query(query);
     return result.rows.map((row) => new Comment({
       id: row.id,
-      content: row.is_deleted ? '**komentar telah dihapus**' : row.content,
+      content: row.content,
       date: row.date,
       username: row.username,
       is_deleted: Boolean(row.is_deleted),
